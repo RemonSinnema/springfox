@@ -15,13 +15,8 @@ ext {
   sonatypePassword = project.hasProperty('ossPassword') ?
       project.property('ossPassword') :
       System.getenv('SONATYPE_PASSWORD')
-  shouldSyncWithMavenCentral = project.hasProperty('ossSync') ?
-      project.property('ossSync') :
-      System.getenv('SONATYPE_SYNC')
+  isReleaseVersion = !project.version.endsWith("SNAPSHOT")
 }
-
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-
 
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
