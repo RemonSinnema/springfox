@@ -43,6 +43,8 @@ public class UiConfiguration {
   private final Boolean showCommonExtensions;
   private final TagsSorter tagsSorter;
   private final String validatorUrl;
+  private final Boolean syntaxHighlightActivate;
+  private final String syntaxHighlightTheme;
 
   /*--------------------------------------------*\
    * Network
@@ -111,7 +113,9 @@ public class UiConfiguration {
       TagsSorter tagsSorter,
       String[] supportedSubmitMethods,
       String validatorUrl,
-      String swaggerBaseUiUrl) {
+      String swaggerBaseUiUrl,
+      Boolean syntaxHighlightActivate,
+      String syntaxHighlightTheme) {
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
     this.defaultModelsExpandDepth = defaultModelsExpandDepth;
@@ -128,6 +132,8 @@ public class UiConfiguration {
     this.supportedSubmitMethods = supportedSubmitMethods;
     this.validatorUrl = validatorUrl;
     this.swaggerBaseUiUrl = swaggerBaseUiUrl;
+    this.syntaxHighlightActivate = syntaxHighlightActivate;
+    this.syntaxHighlightTheme = syntaxHighlightTheme;
   }
 
   @JsonProperty("deepLinking")
@@ -194,6 +200,16 @@ public class UiConfiguration {
   public TagsSorter getTagsSorter() {
     return tagsSorter;
   }
+
+  @JsonProperty("syntaxHighlightActivate")
+  public Boolean getSyntaxHighlightActivate() {
+        return syntaxHighlightActivate;
+    }
+
+  @JsonProperty("syntaxHighlightTheme")
+  public String getSyntaxHighlightTheme() {
+        return syntaxHighlightTheme;
+    }
 
   @JsonProperty("supportedSubmitMethods")
   public String[] getSupportedSubmitMethods() {

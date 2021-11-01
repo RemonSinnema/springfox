@@ -38,6 +38,8 @@ public class UiConfigurationBuilder {
   private Boolean showExtensions;
   private Boolean showCommonExtensions = false;
   private TagsSorter tagsSorter;
+  private Boolean syntaxHighlightActivate;
+  private String syntaxHighlightTheme;
 
   /*--------------------------------------------*\
    * Network
@@ -70,7 +72,9 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
         defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
         defaultIfAbsent(validatorUrl, null),
-        defaultIfAbsent(swaggerUiBaseUrl, null)
+        defaultIfAbsent(swaggerUiBaseUrl, null),
+        defaultIfAbsent(syntaxHighlightActivate, true),
+        defaultIfAbsent(syntaxHighlightTheme, "agate")
     );
   }
 
@@ -206,6 +210,16 @@ public class UiConfigurationBuilder {
     return this;
   }
 
+  public UiConfigurationBuilder syntaxHighlightActivate(Boolean syntaxHighlightActivate) {
+    this.syntaxHighlightActivate = syntaxHighlightActivate;
+    return this;
+  }
+
+  public UiConfigurationBuilder syntaxHighlightTheme(String syntaxHighlightTheme) {
+    this.syntaxHighlightTheme = syntaxHighlightTheme;
+    return this;
+  }
+
   /**
    * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
    *                               disables Try it out for all operations. This does not filter the operations from the
@@ -254,6 +268,8 @@ public class UiConfigurationBuilder {
         .supportedSubmitMethods(other.getSupportedSubmitMethods())
         .tagsSorter(other.getTagsSorter())
         .validatorUrl(other.getValidatorUrl())
-        .swaggerUiBaseUrl(other.getSwaggerBaseUiUrl());
+        .swaggerUiBaseUrl(other.getSwaggerBaseUiUrl())
+        .syntaxHighlightActivate(other.getSyntaxHighlightActivate())
+        .syntaxHighlightTheme(other.getSyntaxHighlightTheme());
   }
 }

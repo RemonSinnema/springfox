@@ -1,25 +1,7 @@
 # Springfox
 
-[![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox?ref=badge_shield)
-[ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion) 
-[![Project Stats](https://www.openhub.net/p/springfox/widgets/project_thin_badge.gif)](https://www.openhub.net/p/springfox)
-
-| Build Status  | Coverage   | Code Analysis |
-|---|---|---|
-|[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![codecov](https://codecov.io/gh/springfox/springfox/branch/master/graph/badge.svg)](https://codecov.io/gh/springfox/springfox) |[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=alert_status)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-
-| Sonar Cloud |
-|------------ |
-|[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=security_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_index)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=coverage)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-
 ### About
-For more information on this project visit the [Springfox Website](http://springfox.io) or
+This is the fork of the springfox project. For more information on the original project visit the [Springfox Website](http://springfox.io) or
  [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
 
 ### Useful links
@@ -38,16 +20,16 @@ For more information on this project visit the [Springfox Website](http://spring
 For Maven
 ```xml 
 <dependency>
-    <groupId>io.springfox</groupId>
+    <groupId>org.thingsboard</groupId>
     <artifactId>springfox-boot-starter</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 
 ```
 
 For Gradle
 ```gradle 
-  implementation "io.springfox:springfox-boot-starter:<version>"
+  implementation "org.thingsboard:springfox-boot-starter:<version>"
 ```
 #### Migrating from earlier snapshot 
 #### Spring Boot Applications

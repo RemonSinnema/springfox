@@ -1,4 +1,4 @@
-group = 'io.springfox'
+group = 'org.thingsboard'
 
 repositories {
   mavenCentral()

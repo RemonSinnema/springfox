@@ -1,3 +1,4 @@
+import httpLoginAuthPlugin from "./http-login-auth"
 import csrfSupport from './csrf';
 
 window.onload = () => {
@@ -75,7 +76,8 @@ window.onload = () => {
       \*--------------------------------------------*/
       layout: "StandaloneLayout",
       plugins: [
-        SwaggerUIBundle.plugins.DownloadUrl
+        SwaggerUIBundle.plugins.DownloadUrl,
+        httpLoginAuthPlugin
       ],
       presets: [
         SwaggerUIBundle.presets.apis,
@@ -96,7 +98,10 @@ window.onload = () => {
       operationsSorter: configUI.operationsSorter,
       showExtensions: configUI.showExtensions,
       showCommonExtensions: configUI.showCommonExtensions,
-      tagSorter: configUI.tagSorter,
+      syntaxHighlight: configUI.syntaxHighlightActivate ? {
+        activate: true,
+        theme: configUI.syntaxHighlightTheme
+      } : false,
       /*--------------------------------------------*\
        * Network
       \*--------------------------------------------*/

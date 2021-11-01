@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.mapstruct.Mapper;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.HttpAuthenticationScheme;
+import springfox.documentation.service.HttpLoginPasswordScheme;
 import springfox.documentation.service.OAuth2Scheme;
 import springfox.documentation.service.OpenIdConnectScheme;
 
@@ -22,45 +23,65 @@ public class SecuritySchemeMapper {
     return mapped;
   }
 
+  SecurityScheme httpAuth(springfox.documentation.service.SecurityScheme scheme, SecurityScheme securityScheme) {
+      return securityScheme
+              .type(SecurityScheme.Type.HTTP)
+              .description(scheme.getDescription())
+              .bearerFormat(((HttpAuthenticationScheme) scheme).getBearerFormat())
+              .scheme(((HttpAuthenticationScheme) scheme).getScheme());
+  }
+
+  SecurityScheme httpLogin(springfox.documentation.service.SecurityScheme scheme, SecurityScheme securityScheme) {
+      String bearerFormat = ((HttpLoginPasswordScheme) scheme).getLoginEndpoint();
+      bearerFormat += "|" + ((HttpLoginPasswordScheme) scheme).getAuthorizationHeader();
+      return securityScheme
+          .type(SecurityScheme.Type.HTTP)
+          .description(scheme.getDescription())
+          .bearerFormat(bearerFormat)
+          .scheme(((HttpLoginPasswordScheme) scheme).getScheme());
+  }
+
+  SecurityScheme oauth2(springfox.documentation.service.SecurityScheme scheme, SecurityScheme securityScheme) {
+      OAuthFlows flows = new OAuthFlows();
+      Scopes scopes = new Scopes();
+      ((OAuth2Scheme) scheme).getScopes()
+              .forEach(s -> scopes.addString(s.getScope(), s.getDescription()));
+      OAuthFlow flow = new OAuthFlow()
+              .authorizationUrl(((OAuth2Scheme) scheme).getAuthorizationUrl())
+              .refreshUrl(((OAuth2Scheme) scheme).getRefreshUrl())
+              .tokenUrl(((OAuth2Scheme) scheme).getTokenUrl())
+              .scopes(scopes);
+      switch (((OAuth2Scheme) scheme).getFlowType()) {
+          case "password":
+              flows.password(flow);
+              break;
+          case "clientCredentials":
+              flows.clientCredentials(flow);
+              break;
+          case "authorizationCode":
+              flows.authorizationCode(flow);
+              break;
+          case "implicit":
+          default:
+              flows.implicit(flow);
+              break;
+      }
+      return securityScheme
+              .type(SecurityScheme.Type.OAUTH2)
+              .description(scheme.getDescription())
+              .flows(flows);
+  }
+
   void mapScheme(Map<String, SecurityScheme> map, springfox.documentation.service.SecurityScheme scheme) {
     SecurityScheme mapped = null;
     SecurityScheme securityScheme = new SecurityScheme()
         .extensions(new VendorExtensionsMapper().mapExtensions(scheme.getVendorExtensions()));
     if (scheme instanceof HttpAuthenticationScheme) {
-      mapped = securityScheme
-          .type(SecurityScheme.Type.HTTP)
-          .description(scheme.getDescription())
-          .bearerFormat(((HttpAuthenticationScheme) scheme).getBearerFormat())
-          .scheme(((HttpAuthenticationScheme) scheme).getScheme());
+      mapped = httpAuth(scheme, securityScheme);
+    } else if (scheme instanceof HttpLoginPasswordScheme) {
+      mapped = httpLogin(scheme, securityScheme);
     } else if (scheme instanceof OAuth2Scheme) {
-      OAuthFlows flows = new OAuthFlows();
-      Scopes scopes = new Scopes();
-      ((OAuth2Scheme) scheme).getScopes()
-                             .forEach(s -> scopes.addString(s.getScope(), s.getDescription()));
-      OAuthFlow flow = new OAuthFlow()
-          .authorizationUrl(((OAuth2Scheme) scheme).getAuthorizationUrl())
-          .refreshUrl(((OAuth2Scheme) scheme).getRefreshUrl())
-          .tokenUrl(((OAuth2Scheme) scheme).getTokenUrl())
-          .scopes(scopes);
-      switch (((OAuth2Scheme) scheme).getFlowType()) {
-        case "password":
-          flows.password(flow);
-          break;
-        case "clientCredentials":
-          flows.clientCredentials(flow);
-          break;
-        case "authorizationCode":
-          flows.authorizationCode(flow);
-          break;
-        case "implicit":
-        default:
-          flows.implicit(flow);
-          break;
-      }
-      mapped = securityScheme
-          .type(SecurityScheme.Type.OAUTH2)
-          .description(scheme.getDescription())
-          .flows(flows);
+      mapped = oauth2(scheme, securityScheme);
     } else if (scheme instanceof ApiKey) {
       mapped = securityScheme
           .type(SecurityScheme.Type.APIKEY)

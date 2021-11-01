@@ -9,11 +9,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(jsx|js)$/,
         exclude: /node_modules/,
-        use: {
+        use: [{
           loader: 'babel-loader',
-        }
+          options: {
+              presets: [
+                  ['@babel/preset-env', {
+                      "targets": "defaults"
+                  }],
+                  '@babel/preset-react'
+              ],
+              plugins: [
+                  [
+                      "@babel/plugin-proposal-class-properties",
+                      {
+                          "loose": true
+                      }
+                  ]
+              ]
+          }
+        }]
       }
     ]
   },

@@ -60,7 +60,7 @@ subprojects {
   checkstyleMain.source = "src/main/java"
 
 
-  group = 'io.springfox'
+  group = 'org.thingsboard'
   version = project.rootProject.version
 
   task allDeps(type: DependencyReportTask) {}
