@@ -239,10 +239,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         /* was jacksonProperty.getPrimaryMember() but as of jackson-binding:2.9+
         includes setter-less properties returning false positives so returning
         back to original getPrimaryMember() implementation */
-      if (givenContext.isReturnType()) {
+      //if (givenContext.isReturnType()) {
         return jacksonProperty.getAccessor();
-      }
-      return jacksonProperty.getMutator();
+      //}
+      // return jacksonProperty.getMutator();
     } catch (IllegalArgumentException e) {
       LOG.warn(String.format(
           "Unable to get unique property. %s",

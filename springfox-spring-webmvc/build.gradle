@@ -17,6 +17,7 @@ dependencies {
 
   api libs.core
   api libs.spring
+  api libs.swagger2Core
 
   compileOnly libs.springProvidedWithMvc
   compileOnly libs.clientProvided

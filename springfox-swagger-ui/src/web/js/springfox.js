@@ -1,4 +1,5 @@
-import httpLoginAuthPlugin from "./http-login-auth"
+import tbComponentsPlugin from "./tb-components";
+import httpLoginAuthPlugin from "./http-login-auth";
 import csrfSupport from './csrf';
 
 window.onload = () => {
@@ -77,12 +78,17 @@ window.onload = () => {
       layout: "StandaloneLayout",
       plugins: [
         SwaggerUIBundle.plugins.DownloadUrl,
+        tbComponentsPlugin,
         httpLoginAuthPlugin
       ],
       presets: [
         SwaggerUIBundle.presets.apis,
         SwaggerUIStandalonePreset
       ],
+      /*--------------------------------------------*\
+       * Auth
+      \*--------------------------------------------*/
+      persistAuthorization: configUI.persistAuthorization,
       /*--------------------------------------------*\
        * Display
       \*--------------------------------------------*/

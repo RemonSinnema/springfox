@@ -52,6 +52,11 @@ public class UiConfiguration {
   private final String[] supportedSubmitMethods;
   private final String swaggerBaseUiUrl;
 
+  /*--------------------------------------------*\
+   * Auth
+  \*--------------------------------------------*/
+  private final Boolean persistAuthorization;
+
   /**
    * Default constructor
    *
@@ -115,7 +120,8 @@ public class UiConfiguration {
       String validatorUrl,
       String swaggerBaseUiUrl,
       Boolean syntaxHighlightActivate,
-      String syntaxHighlightTheme) {
+      String syntaxHighlightTheme,
+      Boolean persistAuthorization) {
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
     this.defaultModelsExpandDepth = defaultModelsExpandDepth;
@@ -134,6 +140,7 @@ public class UiConfiguration {
     this.swaggerBaseUiUrl = swaggerBaseUiUrl;
     this.syntaxHighlightActivate = syntaxHighlightActivate;
     this.syntaxHighlightTheme = syntaxHighlightTheme;
+    this.persistAuthorization = persistAuthorization;
   }
 
   @JsonProperty("deepLinking")
@@ -209,7 +216,12 @@ public class UiConfiguration {
   @JsonProperty("syntaxHighlightTheme")
   public String getSyntaxHighlightTheme() {
         return syntaxHighlightTheme;
-    }
+  }
+
+  @JsonProperty("persistAuthorization")
+  public Boolean getPersistAuthorization() {
+    return persistAuthorization;
+}
 
   @JsonProperty("supportedSubmitMethods")
   public String[] getSupportedSubmitMethods() {

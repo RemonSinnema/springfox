@@ -79,7 +79,12 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
       Optional<ApiModelProperty> finalAnnotation = annotation;
       context.getSpecificationBuilder()
              .description(annotation.map(toDescription(descriptions)).orElse(null))
-             .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
+             .readOnly(
+                     annotation.map(
+                             api -> api.readOnly() || api.accessMode() == ApiModelProperty.AccessMode.READ_ONLY
+                     )
+                     .orElse(false)
+             )
              .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
              .type(modelSpecification)
              .position(annotation.map(ApiModelProperty::position).orElse(0))
@@ -90,7 +95,12 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
       context.getBuilder()
              .allowableValues(annotation.map(toAllowableValues()).orElse(null))
              .required(annotation.map(ApiModelProperty::required).orElse(false))
-             .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
+              .readOnly(
+                      annotation.map(
+                              api -> api.readOnly() || api.accessMode() == ApiModelProperty.AccessMode.READ_ONLY
+                      )
+                      .orElse(false)
+              )
              .description(annotation.map(toDescription(descriptions)).orElse(null))
              .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
              .type(annotation.map(toType(context.getResolver())).orElse(null))

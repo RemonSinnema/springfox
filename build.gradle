@@ -60,7 +60,7 @@ subprojects {
 
 
   group = 'org.thingsboard'
-  version = '3.0.1'
+  version = '3.0.2'
 
   task allDeps(type: DependencyReportTask) {}
 

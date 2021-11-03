@@ -7,6 +7,11 @@ export function authorizeHttpJwtToken(payload) {
     }
 }
 
+export const authorizeHttpJwtTokenWithPersistOption = (payload) => ( { authActions } ) => {
+    authActions.authorizeHttpJwtToken(payload)
+    authActions.persistAuthorizationIfNeeded()
+}
+
 export const authorizeHttpLoginPassword = ( auth ) => ( { fn, getConfigs, authActions, errActions } ) => {
     let { name, loginEndpoint, username, password, authHeader } = auth;
     errActions.clear({
@@ -37,7 +42,7 @@ export const authorizeHttpLoginPassword = ( auth ) => ( { fn, getConfigs, authAc
         }
         let loginResponse = JSON.parse(response.data);
         let token = loginResponse.token;
-        authActions.authorizeHttpJwtToken({
+        authActions.authorizeHttpJwtTokenWithPersistOption({
             name,
             authHeader,
             username,

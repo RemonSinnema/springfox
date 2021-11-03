@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import { parseJwt } from "../helpers.jsx"
 
 export default class LoginPasswordAuth extends React.Component {
     static propTypes = {
@@ -59,25 +60,28 @@ export default class LoginPasswordAuth extends React.Component {
         let errors = errSelectors.allErrors().filter(err => err.get("authId") === name)
         if (scheme === "loginPassword") {
             let username = value ? value.get("username") : null
+            let token = value ? value.get("token") : null
+            let authData = token ? parseJwt(token) : null
             return <div>
                 <h4>
                     <code>{name || schema.get("name")}</code>&nbsp;
                     (http, Username/Password)
                     <JumpToPath path={["securityDefinitions", name]}/>
                 </h4>
-                {username && <h6>Authorized</h6>}
-                <Row>
+                {authData && <h4>Authorized</h4>}
+                {authData && <Markdown source={ '<br>\n**Username:** ' + authData.sub + '\n<br>\n<br>\n**Authority:** ' + authData.scopes[0] + '\n<br>\n<br>' }/>}
+                {!authData && <Row>
                     <Markdown source={schema.get("description")}/>
-                </Row>
-                <Row>
+                </Row>}
+                {!authData && <Row>
                     <label>Username:</label>
                     {
                         username ? <code> {username} </code>
                             : <Col><Input type="text" required="required" name="username" onChange={this.onChange}
                                           autoFocus/></Col>
                     }
-                </Row>
-                <Row>
+                </Row>}
+                {!authData && <Row>
                     <label>Password:</label>
                     {
                         username ? <code> ****** </code>
@@ -86,8 +90,8 @@ export default class LoginPasswordAuth extends React.Component {
                                           type="password"
                                           onChange={this.onChange}/></Col>
                     }
-                </Row>
-                {
+                </Row>}
+                {!authData &&
                     errors.valueSeq().map((error, key) => {
                         return <AuthError error={error}
                                           key={key}/>

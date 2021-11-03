@@ -18,9 +18,11 @@
  */
 package springfox.documentation.spring.web;
 
+import io.swagger.annotations.ApiOperation;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -32,18 +34,23 @@ import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.toSet;
 
 public class WebMvcRequestHandler implements RequestHandler {
   private final String contextPath;
   private final HandlerMethodResolver methodResolver;
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
+  private final Set<MediaType> producedMediaTypes;
 
   public WebMvcRequestHandler(
       String contextPath,
@@ -54,6 +61,7 @@ public class WebMvcRequestHandler implements RequestHandler {
     this.methodResolver = methodResolver;
     this.requestMapping = requestMapping;
     this.handlerMethod = handlerMethod;
+    this.producedMediaTypes = this.detectProducedMediaTypes();
   }
 
   @Override
@@ -100,7 +108,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public Set<MediaType> produces() {
-    return requestMapping.getProducesCondition().getProducibleMediaTypes();
+    return this.producedMediaTypes;
   }
 
   @Override
@@ -160,4 +168,33 @@ public class WebMvcRequestHandler implements RequestHandler {
         .add("key=" + key())
         .toString();
   }
+
+    private Set<MediaType> detectProducedMediaTypes() {
+        Set<MediaType> result = requestMapping.getProducesCondition().getProducibleMediaTypes();
+        if (result.isEmpty()) {
+            Optional<ApiOperation> annotation = this.findAnnotation(ApiOperation.class);
+            if (annotation.isPresent()) {
+                result = this.parseMediaTypes(annotation.get().produces());
+            }
+        }
+        if (result.isEmpty()) {
+            result = Set.of(MediaType.APPLICATION_JSON);
+        }
+        return result;
+    }
+
+    private Set<MediaType> parseMediaTypes(String mediaTypes) {
+        if (!StringUtils.isEmpty(mediaTypes)) {
+            return Stream.of(mediaTypes.split(",")).map(mediaTypeValue -> {
+                try {
+                    return MediaType.valueOf(mediaTypeValue.trim());
+
+                } catch (Exception e) {
+                    return null;
+                }
+            }).filter(Objects::nonNull).collect(toSet());
+        } else {
+            return Collections.emptySet();
+        }
+    }
 }

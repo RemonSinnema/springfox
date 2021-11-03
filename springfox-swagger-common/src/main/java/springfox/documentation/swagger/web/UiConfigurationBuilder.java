@@ -48,6 +48,11 @@ public class UiConfigurationBuilder {
   private String validatorUrl;
   private String swaggerUiBaseUrl;
 
+  /*--------------------------------------------*\
+   * Auth
+  \*--------------------------------------------*/
+  private Boolean persistAuthorization;
+
   private UiConfigurationBuilder() {
   }
 
@@ -74,7 +79,8 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(validatorUrl, null),
         defaultIfAbsent(swaggerUiBaseUrl, null),
         defaultIfAbsent(syntaxHighlightActivate, true),
-        defaultIfAbsent(syntaxHighlightTheme, "agate")
+        defaultIfAbsent(syntaxHighlightTheme, "agate"),
+        defaultIfAbsent(persistAuthorization, false)
     );
   }
 
@@ -221,6 +227,16 @@ public class UiConfigurationBuilder {
   }
 
   /**
+   * @param persistAuthorization If set to true, it persists authorization data and it would not be lost
+   *                             on browser close/refresh
+   * @return this
+   */
+  public UiConfigurationBuilder persistAuthorization(Boolean persistAuthorization) {
+      this.persistAuthorization = persistAuthorization;
+      return this;
+  }
+
+  /**
    * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
    *                               disables Try it out for all operations. This does not filter the operations from the
    *                               display.
@@ -270,6 +286,7 @@ public class UiConfigurationBuilder {
         .validatorUrl(other.getValidatorUrl())
         .swaggerUiBaseUrl(other.getSwaggerBaseUiUrl())
         .syntaxHighlightActivate(other.getSyntaxHighlightActivate())
-        .syntaxHighlightTheme(other.getSyntaxHighlightTheme());
+        .syntaxHighlightTheme(other.getSyntaxHighlightTheme())
+        .persistAuthorization(other.getPersistAuthorization());
   }
 }

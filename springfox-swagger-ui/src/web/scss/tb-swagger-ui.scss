@@ -1,0 +1,13 @@
+.swagger-ui {
+  .responses-inner {
+    &.request {
+      background: #bcc3fc;
+    }
+    &.response-ok {
+      background: rgba(0,255,0,0.2);
+    }
+    &.response-error {
+      background: rgba(255,0,0,0.2);
+    }
+  }
+}
