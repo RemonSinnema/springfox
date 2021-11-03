@@ -48,6 +48,7 @@ export default function execute(_ref, fn) {
     }
     if (request.url) {
         request.url = request.url.replace(/{\?.*%7D=&/, '?');
+        request.url = request.url.replace(/{\?.*%7D=/, '');
     }
     return http(request);
 }
