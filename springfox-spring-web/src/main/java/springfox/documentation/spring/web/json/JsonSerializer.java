@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
 
 public class JsonSerializer {
@@ -39,5 +40,13 @@ public class JsonSerializer {
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not write JSON", e);
     }
+  }
+
+  public <T> T fromJson(Json json, Class<T> clazz) {
+      try {
+          return objectMapper.readValue(json.value(), clazz);
+      } catch (IOException e) {
+          throw new RuntimeException("Could not transform string JSON to object", e);
+      }
   }
 }

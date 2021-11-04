@@ -85,13 +85,37 @@ public class OpenApiControllerWebMvc {
     if (documentation == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    OpenAPI oas = mapper.mapDocumentation(documentation);
-    OpenApiTransformationContext<HttpServletRequest> context
-        = new OpenApiTransformationContext<>(oas, servletRequest);
-    List<WebMvcOpenApiTransformationFilter> filters = transformations.getPluginsFor(DocumentationType.OAS_30);
-    for (WebMvcOpenApiTransformationFilter each : filters) {
-      context = context.next(each.transform(context));
-    }
-    return new ResponseEntity<>(jsonSerializer.toJson(oas), HttpStatus.OK);
+    Json serialized = this.serializedDocumentation(documentation, servletRequest);
+    return new ResponseEntity<>(serialized, HttpStatus.OK);
+  }
+
+  private Json serializedDocumentation(Documentation documentation, HttpServletRequest servletRequest) {
+      OpenAPI existingOas = documentationCache
+              .getSerializedDocumentationByGroup(documentation.getGroupName(), OpenAPI.class);
+      if (existingOas == null) {
+          existingOas = mapper.mapDocumentation(documentation);
+          documentationCache.addSerializedDocumentation(documentation.getGroupName(), existingOas);
+      }
+      OpenAPI oas = makeApiCopy(existingOas);
+      OpenApiTransformationContext<HttpServletRequest> context
+              = new OpenApiTransformationContext<>(oas, servletRequest);
+      List<WebMvcOpenApiTransformationFilter> filters = transformations.getPluginsFor(DocumentationType.OAS_30);
+      for (WebMvcOpenApiTransformationFilter each : filters) {
+          context = context.next(each.transform(context));
+      }
+      return jsonSerializer.toJson(oas);
+  }
+
+  private OpenAPI makeApiCopy(OpenAPI existing) {
+      return new OpenAPI()
+              .openapi(existing.getOpenapi())
+              .info(existing.getInfo())
+              .externalDocs(existing.getExternalDocs())
+              .servers(existing.getServers())
+              .security(existing.getSecurity())
+              .tags(existing.getTags())
+              .paths(existing.getPaths())
+              .components(existing.getComponents())
+              .extensions(existing.getExtensions());
   }
 }

@@ -27,20 +27,38 @@ import java.util.Map;
 
 public class DocumentationCache {
   private Map<String, Documentation> documentationLookup = new LinkedHashMap<>();
+  private Map<String, Object> serializedDocumentationLookup = new LinkedHashMap<>();
 
   public void addDocumentation(Documentation documentation) {
     documentationLookup.put(documentation.getGroupName(), documentation);
+  }
+
+  public void addSerializedDocumentation(String groupName, Object serialized) {
+      serializedDocumentationLookup.put(groupName, serialized);
   }
 
   public Documentation documentationByGroup(String groupName) {
     return documentationLookup.get(groupName);
   }
 
+  public <T> T getSerializedDocumentationByGroup(String groupName, Class<T> clazz) {
+    Object serialized = serializedDocumentationLookup.get(groupName);
+    if (serialized != null && clazz.isAssignableFrom(serialized.getClass())) {
+        return (T) serialized;
+    }
+    return null;
+  }
+
   public Map<String, Documentation> all() {
     return Collections.unmodifiableMap(documentationLookup);
   }
 
+  public Map<String, Object> allSerialized() {
+        return Collections.unmodifiableMap(serializedDocumentationLookup);
+    }
+
   public void clear() {
     documentationLookup.clear();
+    serializedDocumentationLookup.clear();
   }
 }

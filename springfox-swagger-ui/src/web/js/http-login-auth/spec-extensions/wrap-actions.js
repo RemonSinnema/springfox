@@ -13,7 +13,7 @@ export function updateJsonSpec(oriAction, { getConfigs, authActions }) {
                     try {
                         authData = parseJwt(jwt_token);
                     } catch (e) {}
-                    if (authData) {
+                    if (authData && !authData.isPublic) {
                         const username = authData.sub;
                         const token = jwt_token;
                         const authorizedValue = localStorage.getItem("authorized")
