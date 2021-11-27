@@ -94,8 +94,9 @@ public abstract class SchemaMapper {
       ModelSpecification source,
       @Context ModelNamesRegistry namesRegistry) {
     Optional<ModelFacets> facets = source.getFacets();
-    Schema model = mapFrom(source, namesRegistry)
-        .description(facets.map(ModelFacets::getDescription).orElse(null))
+    Schema model = mapFrom(source, namesRegistry);
+    if (model != null) {
+        model.description(facets.map(ModelFacets::getDescription).orElse(null))
 //        .discriminator(source.getCompound()
 //                             .map(CompoundModelSpecification::getDiscriminator)
 //                             .orElse(null)) //TODO: Some work here
@@ -103,6 +104,7 @@ public abstract class SchemaMapper {
             .findFirst().orElse(null))
         .name(source.getName())
         .xml(facets.map(ModelFacets::getXml).map(this::mapXml).orElse(null));
+    }
 
     source.getCompound()
         .ifPresent(c -> {
